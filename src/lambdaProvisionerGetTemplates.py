@@ -6,8 +6,8 @@ s3 = boto3.client('s3')
 
 def lambda_handler(event, context):
 
-    bucket = "btr-provisioner"
-    key = "sample_templates.json"
+    bucket = "demo-lambda-provisioner"
+    key = "templates.json"
 
     try:
 
@@ -21,7 +21,7 @@ def lambda_handler(event, context):
             "headers: " : {
                 "Content-Type":"application/json"
             },
-            "data" : data
+            "body" : data
         }
 
     except Exception as e:
