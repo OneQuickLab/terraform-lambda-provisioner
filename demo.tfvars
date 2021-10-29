@@ -1,0 +1,5 @@
+aws_region              = "ca-central-1"
+aws_account             = "176399646443"
+provisioner_environment = "demo"
+templates_bucket_name   = "demo-lambda-provisioner"
+provisioner_keypair     = "demo-lambda-provisioner"
