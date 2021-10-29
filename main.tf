@@ -178,15 +178,14 @@ module "iam_policy_lambda_provisioner_create_ec2" {
       sid = "LambdaProvisionerCreateEc2RunInstances"
 
       effect    = "Allow"
-      actions   = ["ec2:RunInstances"]
-      resources = ["*"]
-    },
-    {
-      sid = "LambdaProvisionerCreateEc2CreateTags"
-
-      effect     = "Allow"
-      actions    = ["ec2:CreateTags"]
-      resources  = ["arn:aws:ec2:region:account:${var.aws_account}/*"]
+      actions   = [
+        "ec2:RunInstances",
+        "ec2:CreateTags"
+      ]
+      resources = [
+        "*",
+        "arn:aws:ec2:region:account:*/*"
+      ]
       conditions = [
         {
           test     = "StringEquals"
