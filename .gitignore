@@ -55,4 +55,4 @@ crash.log
 # Generated Deployment Package
 *.zip
 src/secrets
-
+terraform/

@@ -2,85 +2,140 @@
 # CREATE IAM POLICIES
 # ----------------------------------------------------------------------------------------------------------------------
 
-module "iam_policy_lambda_provisioner_get_templates" {
-  source  = "mineiros-io/iam-policy/aws"
-  version = "~> 0.5.0"
+# ----------------------------------------------------------------------------------------------------------------------
+# provisionerGetTemplates - Policy and Role
+# ----------------------------------------------------------------------------------------------------------------------
 
-  name = "LambdaProvisionerGetTemplatesPolicy"
+data "aws_iam_policy_document" "iam_policy_document_lambda_provisioner_get_templates" {
 
-  policy_statements = [
-    {
-      sid = "LambdaProvisionerGetTemplatesS3GetObject"
+  statement {
+    sid = "LambdaProvisionerGetTemplatesS3ReadOnly"
 
-      effect    = "Allow"
-      actions   = ["s3:GetObject"]
-      resources = ["arn:aws:s3:::*"]
-    },
-    {
-      sid = "LambdaProvisionerGetTemplatesCreateLogGroup"
+    effect = "Allow"
 
-      effect    = "Allow"
-      actions   = ["logs:CreateLogGroup"]
-      resources = ["arn:aws:logs:${var.aws_region}:${var.aws_account}:*"]
-    },
-    {
-      sid = "LambdaProvisionerGetTemplatesPutLogEvents"
+    actions = [
+      "s3:Get*",
+      "s3:List*",
+      "s3-object-lambda:Get*",
+      "s3-object-lambda:List*"
+    ]
 
-      effect    = "Allow"
-      actions   = [
-        "logs:CreateLogStream",
-        "logs:PutLogEvents"
-      ]
-      resources = ["arn:aws:logs:${var.aws_region}:${var.aws_account}:log-group:/aws/lambda/lambdaProvisionerGetTemplates:*"]
-    }
-  ]
+    resources = [
+      "arn:aws:s3:::*"
+    ]
+
+  }
+
+  statement {
+    sid = "LambdaProvisionerGetTemplatesCreateLogGroup"
+
+    effect = "Allow"
+
+    actions = [
+      "logs:CreateLogGroup"
+    ]
+
+    resources = [
+      "arn:aws:logs:${var.aws_region}:${var.aws_account}:*"
+    ]
+
+  }
+
+  statement {
+    sid = "LambdaProvisionerGetTemplatesPutLogEvents"
+
+    effect = "Allow"
+
+    actions = [
+      "logs:PutLogEvents",
+      "logs:CreateLogStream"
+    ]
+
+    resources = [
+      "arn:aws:logs:${var.aws_region}:${var.aws_account}:log-group:/aws/lambda/lambdaProvisionerGetTemplates:*"
+    ]
+
+  }
+
 }
 
-module "iam_policy_lambda_provisioner_create_ec2" {
-  source  = "mineiros-io/iam-policy/aws"
-  version = "~> 0.5.0"
+resource "aws_iam_policy" "iam_policy_lambda_provisioner_get_templates" {
 
-  name = "LambdaProvisionerCreateEc2Policy"
+  name   = "LambdaProvisionerGetTemplatesPolicy"
+  path   = "/"
+  policy = data.aws_iam_policy_document.iam_policy_document_lambda_provisioner_get_templates.json
 
-  policy_statements = [
-    {
-      sid = "LambdaProvisionerCreateEc2CreateLogGroup"
+}
 
-      effect    = "Allow"
-      actions   = ["logs:CreateLogGroup"]
-      resources = ["arn:aws:logs:${var.aws_region}:${var.aws_account}:*"]
-    },
-    {
-      sid = "LambdaProvisionerCreateEc2PutLogEvents"
+# ----------------------------------------------------------------------------------------------------------------------
+# provisionerCreateEc2 - Policy and Role
+# ----------------------------------------------------------------------------------------------------------------------
 
-      effect    = "Allow"
-      actions   = [
-          "logs:CreateLogStream",
-          "logs:PutLogEvents"
-      ]
-      resources = ["arn:aws:logs:${var.aws_region}:${var.aws_account}:log-group:/aws/lambda/lambdaProvisionerCreateEc2:*"]
-    },
-    {
-      sid = "LambdaProvisionerCreateEc2RunInstances"
+data "aws_iam_policy_document" "iam_policy_document_lambda_provisioner_crete_ec2" {
 
-      effect    = "Allow"
-      actions   = [
-        "ec2:RunInstances",
-        "ec2:CreateTags"
-      ]
-      resources = [
-        "*",
-        "arn:aws:ec2:region:account:*/*"
-      ]
-      conditions = [
-        {
-          test     = "StringEquals"
-          variable = "ec2:CreateAction"
-          values   = [ "RunInstances" ]
-        }
+  statement {
+    sid = "LambdaProvisionerGetTemplatesS3ReadOnly"
+
+    effect = "Allow"
+
+    actions = [
+      "s3:Get*",
+      "s3:List*",
+      "s3-object-lambda:Get*",
+      "s3-object-lambda:List*"
+    ]
+
+    resources = [
+      "arn:aws:s3:::*"
+    ]
+
+  }
+
+  statement {
+    sid = "LambdaProvisionerCreateEc2RunInstances"
+
+    effect = "Allow"
+
+    actions = [
+      "ec2:RunInstances"
+    ]
+
+    resources = [
+      "*"
+    ]
+  }
+
+  statement {
+    sid = "LambdaProvisionerCreateEc2CreateTags"
+
+    effect = "Allow"
+
+    actions = [
+      "ec2:CreateTags"
+    ]
+
+    resources = [
+      "arn:aws:ec2:${var.aws_region}:${var.aws_account}:*/*"
+    ]
+
+    condition {
+      test     = "StringEquals"
+      variable = "ec2:CreateAction"
+      values   = [
+        "RunInstances"
       ]
     }
-  ]
+
+  }
+
+}
+
+resource "aws_iam_policy" "iam_policy_lambda_provisioner_create_ec2" {
+
+  name   = "LambdaProvisionerCreateEc2Policy"
+  path   = "/"
+  policy = data.aws_iam_policy_document.iam_policy_document_lambda_provisioner_crete_ec2.json
+
 }
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -101,7 +156,7 @@ module "iam_role_lambda_provisioner_get_templates" {
   ]
 
   policy_arns = [
-    module.iam_policy_lambda_provisioner_get_templates.policy.arn
+    aws_iam_policy.iam_policy_lambda_provisioner_get_templates.arn
   ]
 
   tags = {
@@ -123,8 +178,7 @@ module "iam_role_lambda_provisioner_create_ec2" {
   ]
 
   policy_arns = [
-    module.iam_policy_lambda_provisioner_create_ec2.policy.arn,
-    "arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess"
+    aws_iam_policy.iam_policy_lambda_provisioner_create_ec2.arn
   ]
 
   tags = {
