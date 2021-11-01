@@ -21,7 +21,7 @@ def lambda_handler(event, context):
             "headers: " : {
                 "Content-Type":"application/json"
             },
-            "data" : data
+            "body" : data
         }
 
     except Exception as e:
