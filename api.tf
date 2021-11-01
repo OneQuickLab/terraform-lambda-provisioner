@@ -2,9 +2,41 @@
 resource "aws_api_gateway_rest_api" "api" {
   name = var.provisioner_api_name
 
+  policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "execute-api:Invoke",
+            "Resource": [
+                "*"
+            ]
+        },
+        {
+            "Effect": "Deny",
+            "Principal": "*",
+            "Action": "execute-api:Invoke",
+            "Resource": [
+                "*"
+            ],
+            "Condition" : {
+                "StringNotEquals": {
+                    "aws:SourceVpce": "${var.aws_api_vpc_endpoint}"
+                }
+            }
+        }
+    ]
+}
+EOF
+
   endpoint_configuration {
     types = [
-      "REGIONAL"
+      "PRIVATE"
+    ]
+    vpc_endpoint_ids = [
+      var.aws_api_vpc_endpoint
     ]
   }
 
@@ -149,7 +181,7 @@ resource "aws_api_gateway_deployment" "lambdaProvisioner" {
     aws_api_gateway_integration.getTemplates,
     aws_api_gateway_integration.createEc2
   ]
-  
+
   variables = {
     provisioner_deployed_at = "${var.provisioner_deployed_at}"
   }

@@ -21,6 +21,12 @@ variable "aws_account" {
   type        = string
 }
 
+variable "aws_api_vpc_endpoint" {
+  description = "AWS API Gateway VPC Endpoint (for PRIVATE endpoints)."
+  type        = string
+}
+
+
 variable "provisioner_environment" {
   description = "Environment of the provisioner."
   type        = string
