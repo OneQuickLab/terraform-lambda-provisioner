@@ -33,6 +33,8 @@ module "lambda_lambda_provisioner_get_templates" {
 
   role_arn = module.iam_role_lambda_provisioner_get_templates.role.arn
 
+  dead_letter_config_target_arn = aws_sns_topic.lambdaProvisioner.arn
+
   module_tags = {
     Environment = var.provisioner_environment
   }
@@ -51,6 +53,8 @@ module "lambda_lambda_provisioner_create_ec2" {
   memory_size   = 128
 
   role_arn = module.iam_role_lambda_provisioner_create_ec2.role.arn
+
+  dead_letter_config_target_arn = aws_sns_topic.lambdaProvisioner.arn
 
   module_tags = {
     Environment = var.provisioner_environment

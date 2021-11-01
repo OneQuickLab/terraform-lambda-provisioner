@@ -45,3 +45,24 @@ variable "provisioner_api_stage" {
   description = "AWS API Gateway Stage."
   type        = string
 }
+
+variable "provisioner_sns_topic" {
+  description = "The SNS topics name to create."
+  type        = string
+}
+
+variable "provisioner_sns_subscriptions" {
+  description = "Subscriptions associated with topics previously created."
+  type        = list(object({
+    endpoints  = string,
+    topic      = string,
+    type       = string
+  }))
+  default = []
+}
+
+variable "provisioner_sns_subscription_enabled" {
+  description = "Conditionally enables this module (and all it's ressources)."
+  type        = bool
+  default     = true
+}

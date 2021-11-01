@@ -32,6 +32,12 @@ resource "aws_iam_role_policy" "LambdaProvisionerGetTemplatesPolicy" {
             "Resource": "arn:aws:logs:${var.aws_region}:${var.aws_account}:*"
         },
         {
+            "Sid": "LambdaProvisionerGetTemplatesSNSPublish",
+            "Effect": "Allow",
+            "Action": "sns:Publish",
+            "Resource": "${aws_sns_topic.lambdaProvisioner.arn}"
+        },
+        {
             "Sid": "LambdaProvisionerGetTemplatesPutLogEvents",
             "Effect": "Allow",
             "Action": [
@@ -63,6 +69,12 @@ resource "aws_iam_role_policy" "LambdaProvisionerCreateEc2Policy" {
                 "s3-object-lambda:Get*"
             ],
             "Resource": "arn:aws:s3:::*"
+        },
+        {
+            "Sid": "LambdaProvisionerGetTemplatesSNSPublish",
+            "Effect": "Allow",
+            "Action": "sns:Publish",
+            "Resource": "${aws_sns_topic.lambdaProvisioner.arn}"
         },
         {
             "Sid": "LambdaProvisionerCreateEc2RunInstances",
