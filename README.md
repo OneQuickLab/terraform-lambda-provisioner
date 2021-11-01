@@ -75,7 +75,7 @@ api_url = "https://80b0x6xz60.execute-api.ca-central-1.amazonaws.com/demo"
 
 Two API methods are available. Each one calls a different Lambda function, as follow:
 
-### Function lambdaProvisionerGetTemplates
+### lambdaProvisionerGetTemplates
 
 * `Function Name: lambdaProvisionerGetTemplates`
 * `Method: GET`
@@ -120,7 +120,7 @@ The function will return the available templates that can be used:
 }
 ```
 
-### Function lambdaProvisionerCreateEc2
+### lambdaProvisionerCreateEc2
 
 * `Function Name: lambdaProvisionerCreateEc2`
 * `Method: POST`
