@@ -3,7 +3,10 @@
 # ----------------------------------------------------------------------------------------------------------------------
 
 provider "aws" {
-  region = var.aws_region
+  region  = var.aws_region
+  profile = "demo"
+
+  shared_credentials_file = "/Users/backtorod/.aws/credentials"
 }
 
 terraform {

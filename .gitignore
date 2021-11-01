@@ -56,3 +56,4 @@ crash.log
 *.zip
 src/secrets
 terraform/
+terraform.tf
