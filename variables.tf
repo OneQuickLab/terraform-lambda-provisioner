@@ -36,6 +36,11 @@ variable "provisioner_keypair" {
   type        = string
 }
 
+variable "provisioner_api_name" {
+  description = "AWS API Gateway Name."
+  type        = string
+}
+
 variable "provisioner_api_stage" {
   description = "AWS API Gateway Stage."
   type        = string

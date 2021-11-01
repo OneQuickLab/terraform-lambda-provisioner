@@ -38,13 +38,6 @@ module "lambda_lambda_provisioner_get_templates" {
   }
 }
 
-resource "aws_lambda_permission" "lambdaProvisionerGetTemplatesApiGwPermission" {
-  statement_id  = "AllowExecutionFromAPIGateway"
-  action        = "lambda:InvokeFunction"
-  function_name = module.lambda_lambda_provisioner_get_templates.function.function_name
-  principal     = "apigateway.amazonaws.com"
-}
-
 module "lambda_lambda_provisioner_create_ec2" {
   source  = "mineiros-io/lambda-function/aws"
   version = "~> 0.5.0"
@@ -62,11 +55,4 @@ module "lambda_lambda_provisioner_create_ec2" {
   module_tags = {
     Environment = var.provisioner_environment
   }
-}
-
-resource "aws_lambda_permission" "lambdaProvisionerCreateEc2ApiGwPermission" {
-  statement_id  = "AllowExecutionFromAPIGateway"
-  action        = "lambda:InvokeFunction"
-  function_name = module.lambda_lambda_provisioner_create_ec2.function.function_name
-  principal     = "apigateway.amazonaws.com"
 }

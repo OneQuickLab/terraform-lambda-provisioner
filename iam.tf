@@ -6,136 +6,86 @@
 # provisionerGetTemplates - Policy and Role
 # ----------------------------------------------------------------------------------------------------------------------
 
-data "aws_iam_policy_document" "iam_policy_document_lambda_provisioner_get_templates" {
+resource "aws_iam_role_policy" "LambdaProvisionerGetTemplatesPolicy" {
+  name = "LambdaProvisionerGetTemplatesPolicy"
+  role = module.iam_role_lambda_provisioner_get_templates.role.name
 
-  statement {
-    sid = "LambdaProvisionerGetTemplatesS3ReadOnly"
-
-    effect = "Allow"
-
-    actions = [
-      "s3:Get*",
-      "s3:List*",
-      "s3-object-lambda:Get*",
-      "s3-object-lambda:List*"
+  policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "LambdaProvisionerGetTemplatesS3ReadOnly",
+            "Effect": "Allow",
+            "Action": [
+                "s3:List*",
+                "s3:Get*",
+                "s3-object-lambda:List*",
+                "s3-object-lambda:Get*"
+            ],
+            "Resource": "arn:aws:s3:::*"
+        },
+        {
+            "Sid": "LambdaProvisionerGetTemplatesCreateLogGroup",
+            "Effect": "Allow",
+            "Action": "logs:CreateLogGroup",
+            "Resource": "arn:aws:logs:${var.aws_region}:${var.aws_account}:*"
+        },
+        {
+            "Sid": "LambdaProvisionerGetTemplatesPutLogEvents",
+            "Effect": "Allow",
+            "Action": [
+                "logs:PutLogEvents",
+                "logs:CreateLogStream"
+            ],
+            "Resource": "arn:aws:logs:${var.aws_region}:${var.aws_account}:log-group:/aws/lambda/lambdaProvisionerGetTemplates:*"
+        }
     ]
-
-    resources = [
-      "arn:aws:s3:::*"
-    ]
-
-  }
-
-  statement {
-    sid = "LambdaProvisionerGetTemplatesCreateLogGroup"
-
-    effect = "Allow"
-
-    actions = [
-      "logs:CreateLogGroup"
-    ]
-
-    resources = [
-      "arn:aws:logs:${var.aws_region}:${var.aws_account}:*"
-    ]
-
-  }
-
-  statement {
-    sid = "LambdaProvisionerGetTemplatesPutLogEvents"
-
-    effect = "Allow"
-
-    actions = [
-      "logs:PutLogEvents",
-      "logs:CreateLogStream"
-    ]
-
-    resources = [
-      "arn:aws:logs:${var.aws_region}:${var.aws_account}:log-group:/aws/lambda/lambdaProvisionerGetTemplates:*"
-    ]
-
-  }
-
+}
+EOF
 }
 
-resource "aws_iam_policy" "iam_policy_lambda_provisioner_get_templates" {
+resource "aws_iam_role_policy" "LambdaProvisionerCreateEc2Policy" {
+  name = "LambdaProvisionerCreateEc2Policy"
+  role = module.iam_role_lambda_provisioner_create_ec2.role.name
 
-  name   = "LambdaProvisionerGetTemplatesPolicy"
-  path   = "/"
-  policy = data.aws_iam_policy_document.iam_policy_document_lambda_provisioner_get_templates.json
-
+  policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "LambdaProvisionerGetTemplatesS3ReadOnly",
+            "Effect": "Allow",
+            "Action": [
+                "s3:List*",
+                "s3:Get*",
+                "s3-object-lambda:List*",
+                "s3-object-lambda:Get*"
+            ],
+            "Resource": "arn:aws:s3:::*"
+        },
+        {
+            "Sid": "LambdaProvisionerCreateEc2RunInstances",
+            "Effect": "Allow",
+            "Action": "ec2:RunInstances",
+            "Resource": "*"
+        },
+        {
+            "Sid": "LambdaProvisionerCreateEc2CreateTags",
+            "Effect": "Allow",
+            "Action": "ec2:CreateTags",
+            "Resource": "arn:aws:ec2:${var.aws_region}:${var.aws_account}:*/*",
+            "Condition": {
+                "StringEquals": {
+                    "ec2:CreateAction": [
+                        "RunInstances"
+                    ]
+                }
+            }
+        }
+    ]
 }
-
-# ----------------------------------------------------------------------------------------------------------------------
-# provisionerCreateEc2 - Policy and Role
-# ----------------------------------------------------------------------------------------------------------------------
-
-data "aws_iam_policy_document" "iam_policy_document_lambda_provisioner_crete_ec2" {
-
-  statement {
-    sid = "LambdaProvisionerGetTemplatesS3ReadOnly"
-
-    effect = "Allow"
-
-    actions = [
-      "s3:Get*",
-      "s3:List*",
-      "s3-object-lambda:Get*",
-      "s3-object-lambda:List*"
-    ]
-
-    resources = [
-      "arn:aws:s3:::*"
-    ]
-
-  }
-
-  statement {
-    sid = "LambdaProvisionerCreateEc2RunInstances"
-
-    effect = "Allow"
-
-    actions = [
-      "ec2:RunInstances"
-    ]
-
-    resources = [
-      "*"
-    ]
-  }
-
-  statement {
-    sid = "LambdaProvisionerCreateEc2CreateTags"
-
-    effect = "Allow"
-
-    actions = [
-      "ec2:CreateTags"
-    ]
-
-    resources = [
-      "arn:aws:ec2:${var.aws_region}:${var.aws_account}:*/*"
-    ]
-
-    condition {
-      test     = "StringEquals"
-      variable = "ec2:CreateAction"
-      values   = [
-        "RunInstances"
-      ]
-    }
-
-  }
-
-}
-
-resource "aws_iam_policy" "iam_policy_lambda_provisioner_create_ec2" {
-
-  name   = "LambdaProvisionerCreateEc2Policy"
-  path   = "/"
-  policy = data.aws_iam_policy_document.iam_policy_document_lambda_provisioner_crete_ec2.json
-
+EOF
 }
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -155,10 +105,6 @@ module "iam_role_lambda_provisioner_get_templates" {
     }
   ]
 
-  policy_arns = [
-    aws_iam_policy.iam_policy_lambda_provisioner_get_templates.arn
-  ]
-
   tags = {
     Environment = var.provisioner_environment
   }
@@ -175,10 +121,6 @@ module "iam_role_lambda_provisioner_create_ec2" {
       type        = "Service"
       identifiers = ["lambda.amazonaws.com"]
     }
-  ]
-
-  policy_arns = [
-    aws_iam_policy.iam_policy_lambda_provisioner_create_ec2.arn
   ]
 
   tags = {
