@@ -18,9 +18,8 @@ Create a `terraform.tf` file with the following content:
 
 ```file
 provider "aws" {
-  region                  = var.aws_region
-  shared_credentials_file = "/Users/backtorod/.aws/credentials"
-  profile                 = "demo"
+  region  = var.aws_region
+  profile = "demo"
 }
 
 terraform {
