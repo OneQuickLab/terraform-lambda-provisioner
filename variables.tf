@@ -35,3 +35,8 @@ variable "provisioner_keypair" {
   description = "SSH key pair used by EC2 instances."
   type        = string
 }
+
+variable "provisioner_api_stage" {
+  description = "AWS API Gateway Stage."
+  type        = string
+}

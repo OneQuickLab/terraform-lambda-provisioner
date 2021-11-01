@@ -33,12 +33,12 @@ def lambda_handler(event, context):
         print ("@@@ new " + instanceTemplate + " instance created @@@")
         instance_id = instance['Instances'][0]['InstanceId']
 
-        ec2.create_tags(Resources=[instance_id], Tags=[
-            {
-                'Key': 'Name',
-                'Value': "demo-" + instanceTemplate,
-            },
-        ])
+        # ec2.create_tags(Resources=[instance_id], Tags=[
+        #     {
+        #         'Key': 'Name',
+        #         'Value': "demo-" + instanceTemplate,
+        #     },
+        # ])
 
         provisionerResponse = {}
         provisionerResponse['instanceId'] = instance_id
