@@ -1,5 +1,7 @@
 # AWS Lambda EC2 Provisioner Demo
 
+![Use-Case](img/use_case.jpg)
+
 ## Requirements
 
 ### Tooling
@@ -33,22 +35,30 @@ terraform {
 
 ```shell
 $ terraform workspace new demo
-$ terraform init
+$ terraform init -reconfigure -upgrade
 ```
 
 ## Provisioning
 
+## Validation
+
+```shell
+$ terraform fmt
+$ terraform validate
+```
+
 ### Planning
 
 ```shell
-$ terraform plan -var-file=demo.tfvars
+$ TF_VAR_provisioner_deployed_at=$(date +%s) \
+    terraform plan -var-file=examples/demo/configs/input.tfvars
 ```
 
 ### Applying
 
 ```shell
 $ TF_VAR_provisioner_deployed_at=$(date +%s) \
-    terraform apply -var-file=demo.tfvars
+    terraform apply -var-file=examples/demo/configs/input.tfvars
 ```
 
 If you receive the following message when calling your API endpoint, execute the apply process again:
@@ -143,5 +153,6 @@ This function will return the `instanceId` of the newly created EC2 instance:
 ### Destroying
 
 ```shell
-$ terraform destroy -var-file=demo.tfvars
+$ TF_VAR_provisioner_deployed_at=$(date +%s) \
+    terraform destroy -var-file=examples/demo/configs/input.tfvars
 ```
