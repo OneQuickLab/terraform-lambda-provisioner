@@ -38,9 +38,9 @@ terraform workspace new onequicklab
 terraform init -reconfigure -upgrade
 ```
 
-## Provisioning
+### Provisioning
 
-## Validation
+### Validation
 
 ```shell
 terraform fmt
@@ -71,7 +71,7 @@ If you receive the following message when calling your API endpoint, execute the
 
 The stage variable `provisioner_deployed_at` will get updated and this will force an API Deployment.
 
-## Testing
+### Testing
 
 Once resources are provisioned, Terraform will output the AWS API Endpoint URL which can be used to trigger the Lambda functions:
 
@@ -85,7 +85,7 @@ api_url = "https://80b0x6xz60.execute-api.ca-central-1.amazonaws.com/onequicklab
 
 Two API methods are available. Each one calls a different Lambda function, as follow:
 
-### OneQuickLabProvisionerGetTemplates
+#### OneQuickLabProvisionerGetTemplates
 
 * `Function Name: OneQuickLabProvisionerGetTemplates`
 * `Method: GET`
@@ -130,7 +130,7 @@ The function will return the available templates that can be used:
 }
 ```
 
-### OneQuickLabProvisionerCreateEc2
+#### OneQuickLabProvisionerCreateEc2
 
 * `Function Name: OneQuickLabProvisionerCreateEc2`
 * `Method: POST`
@@ -149,7 +149,7 @@ This function will return the `instanceId` of the newly created EC2 instance:
 }
 ```
 
-#### Validating
+### Validating
 
 Validate instances were properly provisioned and their statuses with the following command:
 
