@@ -13,7 +13,7 @@
 ### AWS Credentials
 
 ```shell
-aws configure --profile=demo
+aws configure --profile=onequicklab
 ```
 
 Create a `terraform.tf` file with the following content:
@@ -21,7 +21,7 @@ Create a `terraform.tf` file with the following content:
 ```file
 provider "aws" {
   region  = var.aws_region
-  profile = "demo"
+  profile = "onequicklab"
 }
 
 terraform {
@@ -34,7 +34,7 @@ terraform {
 ## Initialize
 
 ```shell
-terraform workspace new demo
+terraform workspace new onequicklab
 terraform init -reconfigure -upgrade
 ```
 
@@ -51,14 +51,14 @@ terraform validate
 
 ```shell
 TF_VAR_provisioner_deployed_at=$(date +%s) \
-    terraform plan -var-file=examples/demo/configs/input.tfvars
+    terraform plan -var-file=examples/onequicklab/configs/input.tfvars
 ```
 
 ### Applying
 
 ```shell
 TF_VAR_provisioner_deployed_at=$(date +%s) \
-    terraform apply -var-file=examples/demo/configs/input.tfvars
+    terraform apply -var-file=examples/onequicklab/configs/input.tfvars
 ```
 
 If you receive the following message when calling your API endpoint, execute the apply process again:
@@ -80,7 +80,7 @@ Apply complete! Resources: 19 added, 0 changed, 0 destroyed.
 
 Outputs:
 
-api_url = "https://80b0x6xz60.execute-api.ca-central-1.amazonaws.com/demo"
+api_url = "https://80b0x6xz60.execute-api.ca-central-1.amazonaws.com/onequicklab"
 ```
 
 Two API methods are available. Each one calls a different Lambda function, as follow:
@@ -94,7 +94,7 @@ Two API methods are available. Each one calls a different Lambda function, as fo
 Triggering the `lambdaProvisionerGetTemplates` Lambda function can be achieved as follow:
 
 ```bash
-curl -s https://80b0x6xz60.execute-api.ca-central-1.amazonaws.com/demo/templates | jq .
+curl -s https://80b0x6xz60.execute-api.ca-central-1.amazonaws.com/onequicklab/templates | jq .
 ```
 
 The function will return the available templates that can be used:
@@ -112,7 +112,7 @@ The function will return the available templates that can be used:
         "instance_type": "t2.micro",
         "public_ip": true,
         "root_storage": 30,
-        "key_name": "demo-lambda-provisioner",
+        "key_name": "onequicklab-lambda-provisioner",
         "instance_count": 1,
         "region": "ca-central-1"
       },
@@ -121,7 +121,7 @@ The function will return the available templates that can be used:
         "instance_type": "t3.large",
         "public_ip": true,
         "root_storage": 60,
-        "key_name": "demo-lambda-provisioner",
+        "key_name": "onequicklab-lambda-provisioner",
         "instance_count": 1,
         "region": "ca-central-1"
       }
@@ -139,7 +139,7 @@ The function will return the available templates that can be used:
 Triggering the `lambdaProvisionerCreateEc2` Lambda function can be achieved as follow:
 
 ```bash
-curl -sX POST https://80b0x6xz60.execute-api.ca-central-1.amazonaws.com/demo/provision\?instanceTemplate\=linux | jq .
+curl -sX POST https://80b0x6xz60.execute-api.ca-central-1.amazonaws.com/onequicklab/provision\?instanceTemplate\=linux | jq .
 ```
 This function will return the `instanceId` of the newly created EC2 instance:
 
@@ -154,5 +154,5 @@ This function will return the `instanceId` of the newly created EC2 instance:
 
 ```shell
 TF_VAR_provisioner_deployed_at=$(date +%s) \
-    terraform destroy -var-file=examples/demo/configs/input.tfvars
+    terraform destroy -var-file=examples/onequicklab/configs/input.tfvars
 ```
