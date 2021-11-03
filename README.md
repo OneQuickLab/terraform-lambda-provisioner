@@ -149,6 +149,13 @@ This function will return the `instanceId` of the newly created EC2 instance:
 }
 ```
 
+#### Validating
+
+Validate instances were properly provisioned and their statuses with the following command:
+
+```shell
+aws --profile=onequicklab ec2 describe-instances | jq '.Reservations[].Instances[] | .InstanceId, .State'
+```
 
 ### Destroying
 
