@@ -46,23 +46,23 @@ EOF
 # POST - LAMBDA PROVISIONER CREATE EC2
 # ----------------------------------------------------------------------------------------------------------------------
 
-resource "aws_api_gateway_resource" "createEc2" {
+resource "aws_api_gateway_resource" "create_ec2" {
   rest_api_id = aws_api_gateway_rest_api.api.id
   parent_id   = aws_api_gateway_rest_api.api.root_resource_id
   path_part   = "provision"
 }
 
-resource "aws_api_gateway_method" "createEc2" {
+resource "aws_api_gateway_method" "create_ec2" {
   rest_api_id   = aws_api_gateway_rest_api.api.id
-  resource_id   = aws_api_gateway_resource.createEc2.id
+  resource_id   = aws_api_gateway_resource.create_ec2.id
   http_method   = "POST"
   authorization = "NONE"
 }
 
-resource "aws_api_gateway_integration" "createEc2" {
+resource "aws_api_gateway_integration" "create_ec2" {
   rest_api_id = aws_api_gateway_rest_api.api.id
-  resource_id = aws_api_gateway_resource.createEc2.id
-  http_method = aws_api_gateway_method.createEc2.http_method
+  resource_id = aws_api_gateway_resource.create_ec2.id
+  http_method = aws_api_gateway_method.create_ec2.http_method
 
   # AWS lambdas can only be invoked with the POST method
   integration_http_method = "POST"
@@ -74,10 +74,10 @@ resource "aws_api_gateway_integration" "createEc2" {
   ]
 }
 
-resource "aws_api_gateway_method_response" "createEc2" {
+resource "aws_api_gateway_method_response" "create_ec2" {
   rest_api_id = aws_api_gateway_rest_api.api.id
-  resource_id = aws_api_gateway_resource.createEc2.id
-  http_method = aws_api_gateway_integration.createEc2.http_method
+  resource_id = aws_api_gateway_resource.create_ec2.id
+  http_method = aws_api_gateway_integration.create_ec2.http_method
   status_code = "200"
 
   response_models = {
@@ -85,26 +85,26 @@ resource "aws_api_gateway_method_response" "createEc2" {
   }
 }
 
-resource "aws_api_gateway_integration_response" "createEc2" {
+resource "aws_api_gateway_integration_response" "create_ec2" {
   rest_api_id = aws_api_gateway_rest_api.api.id
-  resource_id = aws_api_gateway_resource.createEc2.id
-  http_method = aws_api_gateway_method_response.createEc2.http_method
-  status_code = aws_api_gateway_method_response.createEc2.status_code
+  resource_id = aws_api_gateway_resource.create_ec2.id
+  http_method = aws_api_gateway_method_response.create_ec2.http_method
+  status_code = aws_api_gateway_method_response.create_ec2.status_code
 
   response_templates = {
     "application/json" = ""
   }
 }
 
-resource "aws_lambda_permission" "createEc2" {
-  function_name = "OneQuickLabCreateEc2"
+resource "aws_lambda_permission" "create_ec2" {
+  function_name = module.lambda_lambda_provisioner_create_ec2.function.function_name
   statement_id  = "AllowExecutionFromApiGateway"
   action        = "lambda:InvokeFunction"
   principal     = "apigateway.amazonaws.com"
-  source_arn    = "arn:aws:execute-api:${var.aws_region}:${var.aws_account}:${aws_api_gateway_rest_api.api.id}/*/POST${aws_api_gateway_resource.createEc2.path}"
+  source_arn    = "arn:aws:execute-api:${var.aws_region}:${var.aws_account}:${aws_api_gateway_rest_api.api.id}/*/POST${aws_api_gateway_resource.create_ec2.path}"
   depends_on = [
     aws_api_gateway_rest_api.api,
-    aws_api_gateway_resource.createEc2
+    aws_api_gateway_resource.create_ec2
   ]
 }
 
@@ -112,23 +112,23 @@ resource "aws_lambda_permission" "createEc2" {
 # GET - LAMBDA PROVISIONER GET TEMPLATES
 # ----------------------------------------------------------------------------------------------------------------------
 
-resource "aws_api_gateway_resource" "getTemplates" {
+resource "aws_api_gateway_resource" "get_templates" {
   rest_api_id = aws_api_gateway_rest_api.api.id
   parent_id   = aws_api_gateway_rest_api.api.root_resource_id
   path_part   = "templates"
 }
 
-resource "aws_api_gateway_method" "getTemplates" {
+resource "aws_api_gateway_method" "get_templates" {
   rest_api_id   = aws_api_gateway_rest_api.api.id
-  resource_id   = aws_api_gateway_resource.getTemplates.id
+  resource_id   = aws_api_gateway_resource.get_templates.id
   http_method   = "GET"
   authorization = "NONE"
 }
 
-resource "aws_api_gateway_integration" "getTemplates" {
+resource "aws_api_gateway_integration" "get_templates" {
   rest_api_id = aws_api_gateway_rest_api.api.id
-  resource_id = aws_api_gateway_resource.getTemplates.id
-  http_method = aws_api_gateway_method.getTemplates.http_method
+  resource_id = aws_api_gateway_resource.get_templates.id
+  http_method = aws_api_gateway_method.get_templates.http_method
 
   # AWS lambdas can only be invoked with the POST method
   integration_http_method = "POST"
@@ -137,10 +137,10 @@ resource "aws_api_gateway_integration" "getTemplates" {
 
 }
 
-resource "aws_api_gateway_method_response" "getTemplates" {
+resource "aws_api_gateway_method_response" "get_templates" {
   rest_api_id = aws_api_gateway_rest_api.api.id
-  resource_id = aws_api_gateway_resource.getTemplates.id
-  http_method = aws_api_gateway_integration.getTemplates.http_method
+  resource_id = aws_api_gateway_resource.get_templates.id
+  http_method = aws_api_gateway_integration.get_templates.http_method
   status_code = "200"
 
   response_models = {
@@ -148,38 +148,38 @@ resource "aws_api_gateway_method_response" "getTemplates" {
   }
 }
 
-resource "aws_api_gateway_integration_response" "getTemplates" {
+resource "aws_api_gateway_integration_response" "get_templates" {
   rest_api_id = aws_api_gateway_rest_api.api.id
-  resource_id = aws_api_gateway_resource.getTemplates.id
-  http_method = aws_api_gateway_method_response.getTemplates.http_method
-  status_code = aws_api_gateway_method_response.getTemplates.status_code
+  resource_id = aws_api_gateway_resource.get_templates.id
+  http_method = aws_api_gateway_method_response.get_templates.http_method
+  status_code = aws_api_gateway_method_response.get_templates.status_code
 
   response_templates = {
     "application/json" = ""
   }
 }
 
-resource "aws_lambda_permission" "getTemplates" {
-  function_name = "OneQuickLabGetTemplates"
+resource "aws_lambda_permission" "get_templates" {
+  function_name = module.lambda_lambda_provisioner_get_templates.function.function_name
   statement_id  = "AllowExecutionFromApiGateway"
   action        = "lambda:InvokeFunction"
   principal     = "apigateway.amazonaws.com"
-  source_arn    = "arn:aws:execute-api:${var.aws_region}:${var.aws_account}:${aws_api_gateway_rest_api.api.id}/*/GET${aws_api_gateway_resource.getTemplates.path}"
+  source_arn    = "arn:aws:execute-api:${var.aws_region}:${var.aws_account}:${aws_api_gateway_rest_api.api.id}/*/GET${aws_api_gateway_resource.get_templates.path}"
   depends_on = [
     aws_api_gateway_rest_api.api,
-    aws_api_gateway_resource.getTemplates
+    aws_api_gateway_resource.get_templates
   ]
 }
 
-resource "aws_api_gateway_deployment" "OneQuickLab" {
+resource "aws_api_gateway_deployment" "onequicklab" {
   rest_api_id = aws_api_gateway_rest_api.api.id
   stage_name  = var.provisioner_api_stage
 
   depends_on = [
-    aws_api_gateway_method.getTemplates,
-    aws_api_gateway_method.createEc2,
-    aws_api_gateway_integration.getTemplates,
-    aws_api_gateway_integration.createEc2
+    aws_api_gateway_method.get_templates,
+    aws_api_gateway_method.create_ec2,
+    aws_api_gateway_integration.get_templates,
+    aws_api_gateway_integration.create_ec2
   ]
 
   variables = {
