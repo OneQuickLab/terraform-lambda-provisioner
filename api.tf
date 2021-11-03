@@ -97,7 +97,7 @@ resource "aws_api_gateway_integration_response" "createEc2" {
 }
 
 resource "aws_lambda_permission" "createEc2" {
-  function_name = "lambdaProvisionerCreateEc2"
+  function_name = "OneQuickLabCreateEc2"
   statement_id  = "AllowExecutionFromApiGateway"
   action        = "lambda:InvokeFunction"
   principal     = "apigateway.amazonaws.com"
@@ -160,7 +160,7 @@ resource "aws_api_gateway_integration_response" "getTemplates" {
 }
 
 resource "aws_lambda_permission" "getTemplates" {
-  function_name = "lambdaProvisionerGetTemplates"
+  function_name = "OneQuickLabGetTemplates"
   statement_id  = "AllowExecutionFromApiGateway"
   action        = "lambda:InvokeFunction"
   principal     = "apigateway.amazonaws.com"
@@ -171,7 +171,7 @@ resource "aws_lambda_permission" "getTemplates" {
   ]
 }
 
-resource "aws_api_gateway_deployment" "lambdaProvisioner" {
+resource "aws_api_gateway_deployment" "OneQuickLab" {
   rest_api_id = aws_api_gateway_rest_api.api.id
   stage_name  = var.provisioner_api_stage
 

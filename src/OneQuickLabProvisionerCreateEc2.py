@@ -6,7 +6,7 @@ s3 = boto3.client('s3')
 
 def lambda_handler(event, context):
 
-    bucket = "demo-lambda-provisioner"
+    bucket = "onequicklab-lambda-provisioner"
     key = "templates.json"
 
     try:
@@ -36,7 +36,7 @@ def lambda_handler(event, context):
         # ec2.create_tags(Resources=[instance_id], Tags=[
         #     {
         #         'Key': 'Name',
-        #         'Value': "demo-" + instanceTemplate,
+        #         'Value': "onequicklab-" + instanceTemplate,
         #     },
         # ])
 

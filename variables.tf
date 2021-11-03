@@ -11,6 +11,11 @@
 # These variables must be set when using this module.
 # ---------------------------------------------------------------------------------------------------------------------
 
+variable "aws_vpc_id" {
+  description = "AWS account where resources will be created."
+  type        = string
+}
+
 variable "aws_region" {
   description = "The AWS region in which all resources will be created."
   type        = string
@@ -18,7 +23,7 @@ variable "aws_region" {
 
 variable "aws_account" {
   description = "AWS account where resources will be created."
-  type        = string
+  type        = number
 }
 
 variable "aws_api_vpc_endpoint" {

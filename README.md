@@ -85,13 +85,13 @@ api_url = "https://80b0x6xz60.execute-api.ca-central-1.amazonaws.com/onequicklab
 
 Two API methods are available. Each one calls a different Lambda function, as follow:
 
-### lambdaProvisionerGetTemplates
+### OneQuickLabProvisionerGetTemplates
 
-* `Function Name: lambdaProvisionerGetTemplates`
+* `Function Name: OneQuickLabProvisionerGetTemplates`
 * `Method: GET`
 * `API Path: /templates`
 
-Triggering the `lambdaProvisionerGetTemplates` Lambda function can be achieved as follow:
+Triggering the `OneQuickLabProvisionerGetTemplates` Lambda function can be achieved as follow:
 
 ```bash
 curl -s https://80b0x6xz60.execute-api.ca-central-1.amazonaws.com/onequicklab/templates | jq .
@@ -130,13 +130,13 @@ The function will return the available templates that can be used:
 }
 ```
 
-### lambdaProvisionerCreateEc2
+### OneQuickLabProvisionerCreateEc2
 
-* `Function Name: lambdaProvisionerCreateEc2`
+* `Function Name: OneQuickLabProvisionerCreateEc2`
 * `Method: POST`
 * `API Path: /provision`
 
-Triggering the `lambdaProvisionerCreateEc2` Lambda function can be achieved as follow:
+Triggering the `OneQuickLabProvisionerCreateEc2` Lambda function can be achieved as follow:
 
 ```bash
 curl -sX POST https://80b0x6xz60.execute-api.ca-central-1.amazonaws.com/onequicklab/provision\?instanceTemplate\=linux | jq .

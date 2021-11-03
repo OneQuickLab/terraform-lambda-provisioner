@@ -6,7 +6,7 @@ s3 = boto3.client('s3')
 
 def lambda_handler(event, context):
 
-    bucket = "demo-lambda-provisioner"
+    bucket = "onequicklab-lambda-provisioner"
     key = "templates.json"
 
     try:

@@ -6,8 +6,8 @@
 # provisionerGetTemplates - Policy and Role
 # ----------------------------------------------------------------------------------------------------------------------
 
-resource "aws_iam_role_policy" "LambdaProvisionerGetTemplatesPolicy" {
-  name = "LambdaProvisionerGetTemplatesPolicy"
+resource "aws_iam_role_policy" "OneQuickLabProvisionerGetTemplatesPolicy" {
+  name = "OneQuickLabProvisionerGetTemplatesPolicy"
   role = module.iam_role_lambda_provisioner_get_templates.role.name
 
   policy = <<EOF
@@ -15,7 +15,7 @@ resource "aws_iam_role_policy" "LambdaProvisionerGetTemplatesPolicy" {
     "Version": "2012-10-17",
     "Statement": [
         {
-            "Sid": "LambdaProvisionerGetTemplatesS3ReadOnly",
+            "Sid": "OneQuickLabProvisionerGetTemplatesS3ReadOnly",
             "Effect": "Allow",
             "Action": [
                 "s3:List*",
@@ -26,27 +26,27 @@ resource "aws_iam_role_policy" "LambdaProvisionerGetTemplatesPolicy" {
             "Resource": "arn:aws:s3:::*"
         },
         {
-            "Sid": "LambdaProvisionerGetTemplatesCreateLogGroup",
+            "Sid": "OneQuickLabProvisionerGetTemplatesCreateLogGroup",
             "Effect": "Allow",
             "Action": "logs:CreateLogGroup",
             "Resource": "arn:aws:logs:${var.aws_region}:${var.aws_account}:*"
         },
         {
-            "Sid": "LambdaProvisionerGetTemplatesPutLogEvents",
+            "Sid": "OneQuickLabProvisionerGetTemplatesPutLogEvents",
             "Effect": "Allow",
             "Action": [
                 "logs:PutLogEvents",
                 "logs:CreateLogStream"
             ],
-            "Resource": "arn:aws:logs:${var.aws_region}:${var.aws_account}:log-group:/aws/lambda/lambdaProvisionerGetTemplates:*"
+            "Resource": "arn:aws:logs:${var.aws_region}:${var.aws_account}:log-group:/aws/lambda/OneQuickLabProvisionerGetTemplates:*"
         }
     ]
 }
 EOF
 }
 
-resource "aws_iam_role_policy" "LambdaProvisionerCreateEc2Policy" {
-  name = "LambdaProvisionerCreateEc2Policy"
+resource "aws_iam_role_policy" "OneQuickLabProvisionerCreateEc2Policy" {
+  name = "OneQuickLabProvisionerCreateEc2Policy"
   role = module.iam_role_lambda_provisioner_create_ec2.role.name
 
   policy = <<EOF
@@ -54,7 +54,7 @@ resource "aws_iam_role_policy" "LambdaProvisionerCreateEc2Policy" {
     "Version": "2012-10-17",
     "Statement": [
         {
-            "Sid": "LambdaProvisionerGetTemplatesS3ReadOnly",
+            "Sid": "OneQuickLabProvisionerGetTemplatesS3ReadOnly",
             "Effect": "Allow",
             "Action": [
                 "s3:List*",
@@ -65,13 +65,13 @@ resource "aws_iam_role_policy" "LambdaProvisionerCreateEc2Policy" {
             "Resource": "arn:aws:s3:::*"
         },
         {
-            "Sid": "LambdaProvisionerCreateEc2RunInstances",
+            "Sid": "OneQuickLabProvisionerCreateEc2RunInstances",
             "Effect": "Allow",
             "Action": "ec2:RunInstances",
             "Resource": "*"
         },
         {
-            "Sid": "LambdaProvisionerCreateEc2CreateTags",
+            "Sid": "OneQuickLabProvisionerCreateEc2CreateTags",
             "Effect": "Allow",
             "Action": "ec2:CreateTags",
             "Resource": "arn:aws:ec2:${var.aws_region}:${var.aws_account}:*/*",
@@ -96,7 +96,7 @@ module "iam_role_lambda_provisioner_get_templates" {
   source  = "mineiros-io/iam-role/aws"
   version = "~> 0.6.0"
 
-  name = "LambdaProvisionerGetTemplatesRole"
+  name = "OneQuickLabProvisionerGetTemplatesRole"
 
   assume_role_principals = [
     {
@@ -114,7 +114,7 @@ module "iam_role_lambda_provisioner_create_ec2" {
   source  = "mineiros-io/iam-role/aws"
   version = "~> 0.6.0"
 
-  name = "LambdaProvisionerCreateEc2Role"
+  name = "OneQuickLabProvisionerCreateEc2Role"
 
   assume_role_principals = [
     {
