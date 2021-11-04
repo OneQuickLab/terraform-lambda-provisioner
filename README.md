@@ -37,7 +37,7 @@ terraform {
 
 ```shell
 terraform workspace new onequicklab
-terraform init -reconfigure -upgrade
+terraform
 ```
 
 Also, export the following variable required during provisioning:
