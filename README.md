@@ -37,7 +37,7 @@ terraform {
 
 ```shell
 terraform workspace new onequicklab
-terraform
+terraform init
 ```
 
 Also, export the following variable required during provisioning:
