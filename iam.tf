@@ -67,7 +67,10 @@ resource "aws_iam_role_policy" "OneQuickLabProvisionerCreateEc2Policy" {
         {
             "Sid": "OneQuickLabProvisionerCreateEc2RunInstances",
             "Effect": "Allow",
-            "Action": "ec2:RunInstances",
+            "Action": [
+              "ec2:DescribeInstanceStatus",
+              "ec2:RunInstances"
+            ],
             "Resource": "*"
         },
         {
