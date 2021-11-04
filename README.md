@@ -38,7 +38,11 @@ terraform workspace new onequicklab
 terraform init -reconfigure -upgrade
 ```
 
-### Provisioning
+Also, export the following variable required during provisioning:
+
+```bash
+export TF_VAR_provisioner_deployed_at=$(date +%s)
+```
 
 ### Validation
 
@@ -50,18 +54,16 @@ terraform validate
 ### Planning
 
 ```shell
-TF_VAR_provisioner_deployed_at=$(date +%s) \
-    terraform plan -var-file=examples/onequicklab/configs/input.tfvars
+terraform plan -var-file=examples/onequicklab/configs/input.tfvars
 ```
 
 ### Applying
 
 ```shell
-TF_VAR_provisioner_deployed_at=$(date +%s) \
-    terraform apply -var-file=examples/onequicklab/configs/input.tfvars
+terraform apply -var-file=examples/onequicklab/configs/input.tfvars
 ```
 
-If you receive the following message when calling your API endpoint, execute the apply process again:
+If you receive the following message when calling your API endpoint, export the `TF_VAR_provisioner_deployed_at` again and execute the apply process again:
 
 ```json
 {
@@ -160,6 +162,5 @@ aws --profile=onequicklab ec2 describe-instances | jq '.Reservations[].Instances
 ### Destroying
 
 ```shell
-TF_VAR_provisioner_deployed_at=$(date +%s) \
-    terraform destroy -var-file=examples/onequicklab/configs/input.tfvars
+terraform destroy -var-file=examples/onequicklab/configs/input.tfvars
 ```
