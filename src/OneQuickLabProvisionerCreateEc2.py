@@ -1,6 +1,7 @@
 import boto3
 import json
 import urllib.parse
+import uuid
 
 s3 = boto3.client('s3')
 
@@ -20,28 +21,38 @@ def lambda_handler(event, context):
         # parse query params
         instanceTemplate = event['queryStringParameters']['instanceTemplate']
 
-        ec2 = boto3.client('ec2', region_name=data["provisioner"][instanceTemplate]["region"])
+        ec2 = boto3.resource('ec2', region_name=data["provisioner"][instanceTemplate]["region"])
 
-        instance = ec2.run_instances(
+        random_id = str(uuid.uuid4().fields[-1])[:5]
+
+        instances = ec2.create_instances(
             ImageId=data["provisioner"][instanceTemplate]["ami"],
             InstanceType=data["provisioner"][instanceTemplate]["instance_type"],
             KeyName=data["provisioner"][instanceTemplate]["key_name"],
             MaxCount=int(data["provisioner"][instanceTemplate]["instance_count"]),
-            MinCount=int(data["provisioner"][instanceTemplate]["instance_count"])
+            MinCount=int(data["provisioner"][instanceTemplate]["instance_count"]),
+            TagSpecifications=[
+                {
+                  'ResourceType': 'instance',
+                  'Tags': [
+                    {
+                      'Key': 'Name',
+                      'Value': "onequicklab-" + instanceTemplate + "-" + random_id
+                    }
+                  ]
+                },
+            ]
         )
 
         print ("@@@ new " + instanceTemplate + " instance created @@@")
-        instance_id = instance['Instances'][0]['InstanceId']
-
-        # ec2.create_tags(Resources=[instance_id], Tags=[
-        #     {
-        #         'Key': 'Name',
-        #         'Value': "onequicklab-" + instanceTemplate,
-        #     },
-        # ])
 
         provisionerResponse = {}
-        provisionerResponse['instanceId'] = instance_id
+
+        for instance in instances:
+            print(f'EC2 instance "{instance.id}" has been launched.')
+
+            provisionerResponse['instance_name'] = "onequicklab-" + instanceTemplate + "-" + random_id
+            provisionerResponse['instance_id'] = instance.id
 
         responseObject = {}
         responseObject['statusCode'] = 200
