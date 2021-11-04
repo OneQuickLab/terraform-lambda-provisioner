@@ -85,6 +85,21 @@ resource "aws_iam_role_policy" "OneQuickLabProvisionerCreateEc2Policy" {
                     ]
                 }
             }
+        },
+        {
+            "Sid": "OneQuickLabProvisionerGetTemplatesCreateLogGroup",
+            "Effect": "Allow",
+            "Action": "logs:CreateLogGroup",
+            "Resource": "arn:aws:logs:${var.aws_region}:${var.aws_account}:*"
+        },
+        {
+            "Sid": "OneQuickLabProvisionerGetTemplatesPutLogEvents",
+            "Effect": "Allow",
+            "Action": [
+                "logs:PutLogEvents",
+                "logs:CreateLogStream"
+            ],
+            "Resource": "arn:aws:logs:${var.aws_region}:${var.aws_account}:log-group:/aws/lambda/OneQuickLabProvisionerCreateEc2:*"
         }
     ]
 }
