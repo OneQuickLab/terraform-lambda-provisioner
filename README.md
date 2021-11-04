@@ -31,7 +31,9 @@ terraform {
 }
 ```
 
-## Initialize
+## Provisioning
+
+### Initialization
 
 ```shell
 terraform workspace new onequicklab
@@ -159,7 +161,7 @@ Validate instances were properly provisioned and their statuses with the followi
 aws --profile=onequicklab ec2 describe-instances | jq '.Reservations[].Instances[] | .InstanceId, .State'
 ```
 
-### Destroying
+## Decommissioning
 
 ```shell
 terraform destroy -var-file=examples/onequicklab/configs/input.tfvars
